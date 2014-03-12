@@ -1,0 +1,4 @@
+Valid.js
+========
+
+Validation function
