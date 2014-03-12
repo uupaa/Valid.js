@@ -1,0 +1,38 @@
+{
+  "name":           "uupaa.valid.js",
+  "version":        "0.8.0",
+  "description":    "",
+  "url":            "https://github.com/uupaa/Valid.js",
+  "keywords":       ["Validation", "util", "uupaa"],
+  "repository": {
+    "type":         "git",
+    "url":          "https://github.com/uupaa/Valid.js.git"
+  },
+  "scripts": {
+    "watch":        "node node_modules/uupaa.watch.js --verbose --action build ./lib/Valid.js",
+    "build":        "node node_modules/uupaa.minify.js --keep --option 'formatting pretty_print' --output ./lib/Valid.min.js ./lib/Valid.js",
+    "build-release":"node node_modules/uupaa.minify.js --module all --output ./lib/Valid.min.js",
+    "test":         "NODE_ENV=production NODE_PATH=lib node --harmony test/index.node.js; open test/index.html",
+    "lint":         "plato --title Valid.js --jshint .jshintrc -d lint/plato lib/Valid.js; open lint/plato/index.html"
+  },
+  "build": {
+    "all": { "lib/Valid.js": "" },
+    "node": { },
+    "worker": { },
+    "browser": { }
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "uupaa.help.js":    "",
+    "uupaa.task.js":    "",
+    "uupaa.test.js":    "",
+    "uupaa.watch.js":   "",
+    "uupaa.minify.js":  ""
+  },
+  "lib":            "./lib/",
+  "main":           "./index.js",
+  "author":         "uupaa <uupaa.js@gmail.com>",
+  "license":        "MIT",
+  "contributors":   []
+}
