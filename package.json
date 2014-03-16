@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.valid.js",
-  "version":        "0.8.1",
+  "version":        "0.8.2",
   "description":    "",
   "url":            "https://github.com/uupaa/Valid.js",
   "keywords":       ["Validation", "util", "uupaa"],
@@ -10,10 +10,11 @@
   },
   "scripts": {
     "watch":        "node node_modules/uupaa.watch.js --verbose --action build ./lib/Valid.js",
-    "build":        "node node_modules/uupaa.minify.js --keep --option 'formatting pretty_print' --output ./lib/Valid.min.js ./lib/Valid.js",
-    "build-release":"node node_modules/uupaa.minify.js --module all --output ./lib/Valid.min.js",
+    "build":        "node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --keep --pretty ./lib/Valid.js",
+    "build-simple": "node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --keep --pretty --nowrap --simple ./lib/Valid.js",
+    "build-release":"node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --build all",
     "test":         "NODE_ENV=production NODE_PATH=lib node --harmony test/index.node.js; open test/index.html",
-    "lint":         "plato --title Valid.js --jshint .jshintrc -d lint/plato lib/Valid.js; open lint/plato/index.html"
+    "lint":         "node lint/plato.js; open lint/plato/index.html"
   },
   "build": {
     "all": { "lib/Valid.js": "" },

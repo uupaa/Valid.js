@@ -15,44 +15,47 @@ new Test().add([
 function testValidType(next) {
 
     var rv = [
-            Valid.type({}, "Object/omit"),
-            Valid.type(null, "Object/omit"),
-            Valid.type(undefined, "Object/omit"),
-            Valid.type(123, "Number"),
-            Valid.type(123.4, "Number"),
-            Valid.type(-123, "Number"),
-            Valid.type(-123.4, "Number"),
-            Valid.type(123, "Integer"),
-           !Valid.type(123.4, "Integer"),
-            Valid.type(-123, "Integer"),
-           !Valid.type(-123.4, "Integer"),
-            Valid.type("", "String"),
-            Valid.type("a", "String"),
-           !Valid.type(123, "String"),
-            Valid.type(/a/, "RegExp"),
-           !Valid.type("", "RegExp"),
-            Valid.type([], "Array"),
-            Valid.type([], "Array/Object"),
-            Valid.type([], "Object/Array"),
-            Valid.type([], "Object/Array/omit"),
-            Valid.type(false, "Boolean"),
-            Valid.type(true, "Boolean"),
-           !Valid.type(0, "Boolean"),
-           !Valid.type("", "Boolean"),
-           !Valid.type(null, "Boolean"),
-           !Valid.type(undefined, "Boolean"),
-            Valid.type({ a: 1, b: 2 }, "Object/omit", "a,b"),
-            Valid.type({ a: 1, b: 2, c: 0 }, "JSON/omit", { a: 0, b: 0, c: 0 }),
-           !Valid.type({ a: 1, b: 2, c: {} }, "JSON/omit", { a: 0, b: 0, c: 0 }),
-            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "JSON/omit", { a: 0, b: 0, c: { d: 0 } }),
+            Valid.type({}, "Object/omit"),          // 0
+            Valid.type(null, "Object/omit"),        // 1
+            Valid.type(undefined, "Object/omit"),   // 2
+            Valid.type(123, "Number"),              // 3
+            Valid.type(123.4, "Number"),            // 4
+            Valid.type(-123, "Number"),             // 5
+            Valid.type(-123.4, "Number"),           // 6
+            Valid.type(123, "Integer"),             // 7
+           !Valid.type(123.4, "Integer"),           // 8
+            Valid.type(-123, "Integer"),            // 9
+           !Valid.type(-123.4, "Integer"),          // 10
+            Valid.type("", "String"),               // 11
+            Valid.type("a", "String"),              // 12
+           !Valid.type(123, "String"),              // 13
+            Valid.type(/a/, "RegExp"),              // 14
+           !Valid.type("", "RegExp"),               // 15
+            Valid.type([], "Array"),                // 16
+            Valid.type([], "Array/Object"),         // 17
+            Valid.type([], "Object/Array"),         // 18
+            Valid.type([], "Object/Array/omit"),    // 19
+            Valid.type(false, "Boolean"),           // 20
+            Valid.type(true, "Boolean"),            // 21
+           !Valid.type(0, "Boolean"),               // 22
+           !Valid.type("", "Boolean"),              // 23
+           !Valid.type(null, "Boolean"),            // 24
+           !Valid.type(undefined, "Boolean"),       // 25
+            Valid.type({ a: 1, b: 2 }, "Object/omit", "a,b"), // 26
+            Valid.type({ a: 1, b: 2, c: 0 }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 27
+           !Valid.type({ a: 1, b: 2, c: {} }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 28
+            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "JSON/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
+            Valid.type(new Task(1, function(){}), "Task"), // 30
+            Valid.type(null, "null"),               // 31
+            Valid.type(undefined, "undefined"),     // 32
         ];
 
-    if (!/false/.test(rv.join(","))) {
-        console.log("testValidType ok");
-        next && next.pass();
-    } else {
+    if (/false/.test(rv.join())) {
         console.log("testValidType ng");
         next && next.miss();
+    } else {
+        console.log("testValidType ok");
+        next && next.pass();
     }
 }
 
@@ -65,12 +68,12 @@ function testValidKeys(next) {
            !Valid.keys({ key1: 1, key2: 2, key3: 3 }, "key1,key2"),
         ];
 
-    if (!/false/.test(rv.join(","))) {
-        console.log("testValidKeys ok");
-        next && next.pass();
-    } else {
+    if (/false/.test(rv.join())) {
         console.log("testValidKeys ng");
         next && next.miss();
+    } else {
+        console.log("testValidKeys ok");
+        next && next.pass();
     }
 }
 
