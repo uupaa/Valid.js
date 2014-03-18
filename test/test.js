@@ -2,12 +2,16 @@ new Test().add([
         testValidType,
         testValidKeys,
         testValidJSON,
-    ]).run().worker(function(err, test) {
-        if (!err && typeof Valid_ !== "undefined") {
-            var undo = Test.swap(Valid, Valid_);
+    ]).run(function(err, test) {
+        if (1) {
+            err || test.worker(function(err, test) {
+                if (!err && typeof Valid_ !== "undefined") {
+                    var name = Test.swap(Valid, Valid_);
 
-            new Test(test).run(function(err, test) {
-                Test.undo(undo);
+                    new Test(test).run(function(err, test) {
+                        Test.undo(name);
+                    });
+                }
             });
         }
     });

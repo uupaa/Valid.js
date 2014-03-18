@@ -1,7 +1,7 @@
 {
   "name":           "uupaa.valid.js",
-  "version":        "0.8.2",
-  "description":    "",
+  "version":        "0.8.3",
+  "description":    "Validate functions.",
   "url":            "https://github.com/uupaa/Valid.js",
   "keywords":       ["Validation", "util", "uupaa"],
   "repository": {
@@ -9,18 +9,16 @@
     "url":          "https://github.com/uupaa/Valid.js.git"
   },
   "scripts": {
-    "watch":        "node node_modules/uupaa.watch.js --verbose --action build ./lib/Valid.js",
-    "build":        "node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --keep --pretty ./lib/Valid.js",
-    "build-simple": "node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --keep --pretty --nowrap --simple ./lib/Valid.js",
-    "build-release":"node node_modules/uupaa.minify.js --output ./lib/Valid.min.js --verbose --build all",
+    "watch":        "node node_modules/uupaa.watch.js --verbose --action build",
+    "build":        "node node_modules/uupaa.minify.js --verbose --strict --keep --pretty",
+    "build-simple": "node node_modules/uupaa.minify.js --verbose --strict --keep --pretty --nowrap --simple",
+    "build-release":"node node_modules/uupaa.minify.js --verbose --strict --module",
     "test":         "NODE_ENV=production NODE_PATH=lib node --harmony test/index.node.js; open test/index.html",
-    "lint":         "node lint/plato.js; open lint/plato/index.html"
+    "lint":         "node node_modules/uupaa.plato.js; open lint/plato/index.html"
   },
-  "build": {
-    "all": { "lib/Valid.js": "" },
-    "node": { },
-    "worker": { },
-    "browser": { }
+  "x-build": {
+    "inputs":       ["lib/Valid.js"],
+    "output":       "lib/Valid.min.js"
   },
   "dependencies": {
   },
@@ -29,6 +27,7 @@
     "uupaa.task.js":    "",
     "uupaa.test.js":    "",
     "uupaa.watch.js":   "",
+    "uupaa.plato.js":   "",
     "uupaa.minify.js":  ""
   },
   "lib":            "./lib/",

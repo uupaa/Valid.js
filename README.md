@@ -1,7 +1,7 @@
 Valid.js
 =========
 
-Validation function.
+Validate functions.
 
 # Document
 

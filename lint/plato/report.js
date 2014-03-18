@@ -15,49 +15,49 @@ __report = {
           "line": 3,
           "complexity": {
             "sloc": {
-              "physical": 130,
-              "logical": 73
+              "physical": 142,
+              "logical": 84
             },
-            "cyclomatic": 21,
+            "cyclomatic": 27,
             "halstead": {
               "operators": {
                 "distinct": 25,
-                "total": 190,
+                "total": 212,
                 "identifiers": [
                   "__stripped__"
                 ]
               },
               "operands": {
-                "distinct": 93,
-                "total": 229,
+                "distinct": 99,
+                "total": 251,
                 "identifiers": [
                   "__stripped__"
                 ]
               },
-              "length": 419,
-              "vocabulary": 118,
-              "difficulty": 30.77956989247312,
-              "volume": 2883.8274376826116,
-              "effort": 88762.96817598361,
-              "bugs": 0.9612758125608706,
-              "time": 4931.276009776867
+              "length": 463,
+              "vocabulary": 124,
+              "difficulty": 31.691919191919194,
+              "volume": 3219.7928917091235,
+              "effort": 102041.41613876137,
+              "bugs": 1.0732642972363744,
+              "time": 5668.96756326452
             },
-            "params": 15
+            "params": 16
           }
         },
         "module": "lib/Valid.js",
-        "maintainability": 68.55243905035788
+        "maintainability": 66.59548874507351
       }
     }
   ],
   "summary": {
     "total": {
-      "sloc": 130,
-      "maintainability": 68.55243905035788
+      "sloc": 142,
+      "maintainability": 66.59548874507351
     },
     "average": {
-      "sloc": 130,
-      "maintainability": "68.55"
+      "sloc": 142,
+      "maintainability": "66.60"
     }
   }
 }
