@@ -12,10 +12,10 @@
       },
       "complexity": {
         "aggregate": {
-          "line": 3,
+          "line": 5,
           "complexity": {
             "sloc": {
-              "physical": 142,
+              "physical": 146,
               "logical": 84
             },
             "cyclomatic": 27,
@@ -52,11 +52,11 @@
   ],
   "summary": {
     "total": {
-      "sloc": 142,
+      "sloc": 146,
       "maintainability": 66.59548874507351
     },
     "average": {
-      "sloc": 142,
+      "sloc": 146,
       "maintainability": "66.60"
     }
   }
