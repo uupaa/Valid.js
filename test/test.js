@@ -1,21 +1,25 @@
-new Test().add([
+var ModuleTest = (function(global) {
+
+var testParam = {
+        disable:    false,
+        node:       true,
+        browser:    true,
+        worker:     true,
+        button:     true,
+        both:       false,
+        primary:    global["Valid"],
+        secondary:  global["Valid_"],
+    };
+
+var items = [
         testValidType,
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
-    ]).run(function(err, test) {
-        if (1) {
-            err || test.worker(function(err, test) {
-                if (!err && typeof Valid_ !== "undefined") {
-                    var name = Test.swap(Valid, Valid_);
+        testValidTypeLowerCase
+    ];
 
-                    new Test(test).run(function(err, test) {
-                        Test.undo(name);
-                    });
-                }
-            });
-        }
-    });
+new Test(testParam).add(items).run();
 
 function testValidType(next) {
 
@@ -139,3 +143,54 @@ function testValidTypedArray(next) {
         next && next.pass();
     }
 }
+
+function testValidTypeLowerCase(next) {
+
+    var rv = [
+            Valid.type({}, "object/omit"),          // 0
+            Valid.type(null, "object/omit"),        // 1
+            Valid.type(undefined, "object/omit"),   // 2
+            Valid.type(123, "number"),              // 3
+            Valid.type(123.4, "number"),            // 4
+            Valid.type(-123, "number"),             // 5
+            Valid.type(-123.4, "number"),           // 6
+            Valid.type(123, "integer"),             // 7
+           !Valid.type(123.4, "integer"),           // 8
+            Valid.type(-123, "integer"),            // 9
+           !Valid.type(-123.4, "integer"),          // 10
+            Valid.type("", "string"),               // 11
+            Valid.type("a", "string"),              // 12
+           !Valid.type(123, "string"),              // 13
+            Valid.type(/a/, "regexp"),              // 14
+           !Valid.type("", "regexp"),               // 15
+            Valid.type([], "array"),                // 16
+            Valid.type([], "array/object"),         // 17
+            Valid.type([], "object/array"),         // 18
+            Valid.type([], "object/array/omit"),    // 19
+            Valid.type(false, "boolean"),           // 20
+            Valid.type(true, "boolean"),            // 21
+           !Valid.type(0, "boolean"),               // 22
+           !Valid.type("", "boolean"),              // 23
+           !Valid.type(null, "boolean"),            // 24
+           !Valid.type(undefined, "boolean"),       // 25
+            Valid.type({ a: 1, b: 2 }, "object/omit", "a,b"), // 26
+            Valid.type({ a: 1, b: 2, c: 0 }, "json/omit", { a: 0, b: 0, c: 0 }), // 27
+           !Valid.type({ a: 1, b: 2, c: {} }, "json/omit", { a: 0, b: 0, c: 0 }), // 28
+            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "json/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
+            Valid.type(new Task(1, function(){}), "task"), // 30
+            Valid.type(null, "null"),               // 31
+            Valid.type(undefined, "undefined"),     // 32
+        ];
+
+    if (/false/.test(rv.join())) {
+        console.log("testValidTypeLowerCase ng");
+        next && next.miss();
+    } else {
+        console.log("testValidTypeLowerCase ok");
+        next && next.pass();
+    }
+}
+
+return items;
+})((this || 0).self || global);
+
