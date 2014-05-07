@@ -1,25 +1,19 @@
-var ModuleTest = (function(global) {
+var ModuleTestValid = (function(global) {
 
-var testParam = {
+return new Test("Valid", {
         disable:    false,
         node:       true,
         browser:    true,
         worker:     true,
         button:     true,
         both:       false,
-        primary:    global["Valid"],
-        secondary:  global["Valid_"],
-    };
-
-var items = [
+    }).add([
         testValidType,
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
         testValidTypeLowerCase
-    ];
-
-new Test(testParam).add(items).run();
+    ]).run().clone();
 
 function testValidType(next) {
 
@@ -60,10 +54,8 @@ function testValidType(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        console.log("testValidType ng");
         next && next.miss();
     } else {
-        console.log("testValidType ok");
         next && next.pass();
     }
 }
@@ -78,10 +70,8 @@ function testValidKeys(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        console.log("testValidKeys ng");
         next && next.miss();
     } else {
-        console.log("testValidKeys ok");
         next && next.pass();
     }
 }
@@ -112,10 +102,8 @@ function testValidJSON(next) {
     var rv = Valid.json(json, scheme);
 
     if (rv) {
-        console.log("testValidJSON ok");
         next && next.pass();
     } else {
-        console.log("testValidJSON ng");
         next && next.miss();
     }
 }
@@ -136,10 +124,8 @@ function testValidTypedArray(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        console.log("testValidTypedArray ng");
         next && next.miss();
     } else {
-        console.log("testValidTypedArray ok");
         next && next.pass();
     }
 }
@@ -183,14 +169,11 @@ function testValidTypeLowerCase(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        console.log("testValidTypeLowerCase ng");
         next && next.miss();
     } else {
-        console.log("testValidTypeLowerCase ok");
         next && next.pass();
     }
 }
 
-return items;
 })((this || 0).self || global);
 
