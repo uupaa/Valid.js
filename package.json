@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.valid.js",
-  "version":        "0.8.16",
+  "version":        "0.9.0",
   "description":    "Validate functions.",
   "url":            "https://github.com/uupaa/Valid.js",
   "keywords":       ["Validation", "util", "uupaa", "WebModule"],
@@ -26,7 +26,7 @@
     "target":       ["all"],
     "labels":       ["@dev"],
     "module": {
-      "develop":    [],
+      "develop":    ["uupaa.reflection.js", "uupaa.help.js"],
       "release":    []
     }
   },
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "uupaa.nodemodule.js": "",
+    "uupaa.reflection.js": "",
     "uupaa.console.js": "",
     "uupaa.help.js":    "",
     "uupaa.task.js":    "",
