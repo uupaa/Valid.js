@@ -44,10 +44,10 @@ function testValidType(next) {
            !Valid.type("", "Boolean"),              // 23
            !Valid.type(null, "Boolean"),            // 24
            !Valid.type(undefined, "Boolean"),       // 25
-            Valid.type({ a: 1, b: 2 }, "Object/omit", "a,b"), // 26
-            Valid.type({ a: 1, b: 2, c: 0 }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 27
-           !Valid.type({ a: 1, b: 2, c: {} }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 28
-            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "JSON/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
+//            Valid.type({ a: 1, b: 2 }, "Object/omit", "a,b"), // 26
+//            Valid.type({ a: 1, b: 2, c: 0 }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 27
+//           !Valid.type({ a: 1, b: 2, c: {} }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 28
+//            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "JSON/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
             Valid.type(new Task(1, function(){}), "Task"), // 30
             Valid.type(null, "null"),               // 31
             Valid.type(undefined, "undefined"),     // 32
@@ -159,10 +159,10 @@ function testValidTypeLowerCase(next) {
            !Valid.type("", "boolean"),              // 23
            !Valid.type(null, "boolean"),            // 24
            !Valid.type(undefined, "boolean"),       // 25
-            Valid.type({ a: 1, b: 2 }, "object/omit", "a,b"), // 26
-            Valid.type({ a: 1, b: 2, c: 0 }, "json/omit", { a: 0, b: 0, c: 0 }), // 27
-           !Valid.type({ a: 1, b: 2, c: {} }, "json/omit", { a: 0, b: 0, c: 0 }), // 28
-            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "json/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
+//            Valid.type({ a: 1, b: 2 }, "object/omit", "a,b"), // 26
+//            Valid.type({ a: 1, b: 2, c: 0 }, "json/omit", { a: 0, b: 0, c: 0 }), // 27
+//           !Valid.type({ a: 1, b: 2, c: {} }, "json/omit", { a: 0, b: 0, c: 0 }), // 28
+//            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "json/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
             Valid.type(new Task(1, function(){}), "task"), // 30
             Valid.type(null, "null"),               // 31
             Valid.type(undefined, "undefined"),     // 32
