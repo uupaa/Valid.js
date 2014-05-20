@@ -8,19 +8,45 @@ return new Test("Valid", {
         button:     true,
         both:       false,
     }).add([
+        testValidComplexTypes,
         testValidType,
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
-        testValidTypeLowerCase
+      //testValidTypeLowerCase
     ]).run().clone();
+
+
+function testValidComplexTypes(next) {
+
+    var items = {
+            0: Valid.type({}, "SubjectObject|omit"),
+            1: Valid.type(null, "NullObject|omit"),
+            2: Valid.type(undefined, "UndefinedObject|omit"),
+            3: Valid.type(123, "HeyNumber"),
+            4: Valid.type(/a/, "HogeRegExp"),
+            5: Valid.type([], "StringArray"),
+            6: Valid.type([], "IntegerArray/JSONObject"),
+            7: Valid.type(new Task(1, function(){}), "HogeTask"),
+        };
+
+    var ok = Object.keys(items).every(function(num) {
+                return items[num];
+            });
+
+    if (ok) {
+        next && next.pass();
+    } else {
+        next && next.miss();
+    }
+}
 
 function testValidType(next) {
 
     var rv = [
-            Valid.type({}, "Object/omit"),          // 0
-            Valid.type(null, "Object/omit"),        // 1
-            Valid.type(undefined, "Object/omit"),   // 2
+            Valid.type({}, "Object|omit"),          // 0
+            Valid.type(null, "Object|omit"),        // 1
+            Valid.type(undefined, "Object|omit"),   // 2
             Valid.type(123, "Number"),              // 3
             Valid.type(123.4, "Number"),            // 4
             Valid.type(-123, "Number"),             // 5
@@ -36,8 +62,8 @@ function testValidType(next) {
            !Valid.type("", "RegExp"),               // 15
             Valid.type([], "Array"),                // 16
             Valid.type([], "Array/Object"),         // 17
-            Valid.type([], "Object/Array"),         // 18
-            Valid.type([], "Object/Array/omit"),    // 19
+            Valid.type([], "Object|Array"),         // 18
+            Valid.type([], "Object|Array|omit"),    // 19
             Valid.type(false, "Boolean"),           // 20
             Valid.type(true, "Boolean"),            // 21
            !Valid.type(0, "Boolean"),               // 22
@@ -63,8 +89,8 @@ function testValidType(next) {
 function testValidKeys(next) {
 
     var rv = [
-            Valid.keys({}, "key1,key2,key3"),
-           !Valid.keys({ hey: 1 }, "key1,key2,key3"),
+            Valid.keys({}, "key1/key2/key3"),
+           !Valid.keys({ hey: 1 }, "key1|key2|key3"),
             Valid.keys({ key1: 1, key2: 2 }, "key1,key2"),
            !Valid.keys({ key1: 1, key2: 2, key3: 3 }, "key1,key2"),
         ];
@@ -110,26 +136,32 @@ function testValidJSON(next) {
 
 function testValidTypedArray(next) {
 
-    var rv = [
-            Valid.type(new Int8Array(1), "Int8Array"),      // 0
-            Valid.type(new Uint8Array(1), "Uint8Array"),    // 1
-            Valid.type(new Uint8ClampedArray(1), "Uint8ClampedArray"), // 2
-            Valid.type(new Int16Array(1), "Int16Array"),    // 3
-            Valid.type(new Uint16Array(1), "Uint16Array"),  // 4
-            Valid.type(new Int32Array(1), "Int32Array"),    // 5
-            Valid.type(new Uint32Array(1), "Uint32Array"),  // 6
-            Valid.type(new Float32Array(1), "Float32Array"),// 7
-            Valid.type(new Float64Array(1), "Float64Array"),// 8
-           !Valid.type(new Array(1), "Uint32Array"),        // 9
-        ];
+    var items = {
+            1: Valid.type(new Int8Array(1), "Int8Array"),
+            2: Valid.type(new Uint8Array(1), "Uint8Array"),
+            3: Valid.type(new Uint8ClampedArray(1), "Uint8ClampedArray"),
+            4: Valid.type(new Int16Array(1), "Int16Array"),
+            5: Valid.type(new Uint16Array(1), "Uint16Array"),
+            6: Valid.type(new Int32Array(1), "Int32Array"),
+            7: Valid.type(new Uint32Array(1), "Uint32Array"),
+            8: Valid.type(new Float32Array(1), "Float32Array"),
+            9: Valid.type(new Float64Array(1), "Float64Array"),
+            10: !Valid.type(new Array(1), "Uint32Array"),
+            11: !Valid.type(new Float64Array(1), "Uint32Array"),
+        };
 
-    if (/false/.test(rv.join())) {
-        next && next.miss();
-    } else {
+    var ok = Object.keys(items).every(function(num) {
+                return items[num];
+            });
+
+    if (ok) {
         next && next.pass();
+    } else {
+        next && next.miss();
     }
 }
 
+/*
 function testValidTypeLowerCase(next) {
 
     var rv = [
@@ -174,6 +206,7 @@ function testValidTypeLowerCase(next) {
         next && next.pass();
     }
 }
+ */
 
 })((this || 0).self || global);
 
