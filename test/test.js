@@ -28,6 +28,8 @@ function testValidComplexTypes(next) {
             5: Valid.type([], "StringArray"),
             6: Valid.type([], "IntegerArray/JSONObject"),
             7: Valid.type(new Task(1, function(){}), "HogeTask"),
+            8: Valid.type("123", "IDString"),
+            9: Valid.type("123", "ObjectIDString")
         };
 
     var ok = Object.keys(items).every(function(num) {
