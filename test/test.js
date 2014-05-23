@@ -10,6 +10,7 @@ return new Test("Valid", {
     }).add([
         testValidComplexTypes,
         testValidType,
+        testValidSome,
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
@@ -45,47 +46,74 @@ function testValidComplexTypes(next) {
 }
 
 function testValidType(next) {
+    function Aaa() {}
 
-    var rv = [
-            Valid.type({}, "Object|omit"),          // 0
-            Valid.type(null, "Object|omit"),        // 1
-            Valid.type(undefined, "Object|omit"),   // 2
-            Valid.type(123, "Number"),              // 3
-            Valid.type(123.4, "Number"),            // 4
-            Valid.type(-123, "Number"),             // 5
-            Valid.type(-123.4, "Number"),           // 6
-            Valid.type(123, "Integer"),             // 7
-           !Valid.type(123.4, "Integer"),           // 8
-            Valid.type(-123, "Integer"),            // 9
-           !Valid.type(-123.4, "Integer"),          // 10
-            Valid.type("", "String"),               // 11
-            Valid.type("a", "String"),              // 12
-           !Valid.type(123, "String"),              // 13
-            Valid.type(/a/, "RegExp"),              // 14
-           !Valid.type("", "RegExp"),               // 15
-            Valid.type([], "Array"),                // 16
-            Valid.type([], "Array/Object"),         // 17
-            Valid.type([], "Object|Array"),         // 18
-            Valid.type([], "Object|Array|omit"),    // 19
-            Valid.type(false, "Boolean"),           // 20
-            Valid.type(true, "Boolean"),            // 21
-           !Valid.type(0, "Boolean"),               // 22
-           !Valid.type("", "Boolean"),              // 23
-           !Valid.type(null, "Boolean"),            // 24
-           !Valid.type(undefined, "Boolean"),       // 25
-//            Valid.type({ a: 1, b: 2 }, "Object/omit", "a,b"), // 26
-//            Valid.type({ a: 1, b: 2, c: 0 }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 27
-//           !Valid.type({ a: 1, b: 2, c: {} }, "JSON/omit", { a: 0, b: 0, c: 0 }), // 28
-//            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "JSON/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
-            Valid.type(new Task(1, function(){}), "Task"), // 30
-            Valid.type(null, "null"),               // 31
-            Valid.type(undefined, "undefined"),     // 32
-        ];
+    var aaa = new Aaa();
 
-    if (/false/.test(rv.join())) {
-        next && next.miss();
-    } else {
+    var items = {
+            1:  Valid.type({}, "Object|omit"),
+            2:  Valid.type(null, "Object|omit"),
+            3:  Valid.type(undefined, "Object|omit"),
+            4:  Valid.type(123, "Number"),
+            5:  Valid.type(123.4, "Number"),
+            6:  Valid.type(-123, "Number"),
+            7:  Valid.type(-123.4, "Number"),
+            8:  Valid.type(123, "Integer"),
+            9: !Valid.type(123.4, "Integer"),
+           10:  Valid.type(-123, "Integer"),
+           11: !Valid.type(-123.4, "Integer"),
+           12:  Valid.type("", "String"),
+           13:  Valid.type("a", "String"),
+           14: !Valid.type(123, "String"),
+           15:  Valid.type(/a/, "RegExp"),
+           16: !Valid.type("", "RegExp"),
+           17:  Valid.type([], "Array"),
+           18:  Valid.type([], "Array/Object"),
+           19:  Valid.type([], "Object|Array"),
+           20:  Valid.type([], "Object|Array|omit"),
+           21:  Valid.type(false, "Boolean"),
+           22:  Valid.type(true, "Boolean"),
+           23: !Valid.type(0, "Boolean"),
+           24: !Valid.type("", "Boolean"),
+           25: !Valid.type(null, "Boolean"),
+           26: !Valid.type(undefined, "Boolean"),
+           27:  Valid.type(new Task(1, function(){}), "Task"),
+           28:  Valid.type(null, "null"),
+           29:  Valid.type(undefined, "undefined"),
+           30:  Valid.type(void 0, "void"),
+           31:  Valid.type(void 0, "Void"),
+           32:  Valid.type(void 0, "Undefined"),
+           33:  Valid.type(aaa, "this"),
+        };
+
+    var ok = Object.keys(items).every(function(num) {
+                return items[num];
+            });
+
+    if (ok) {
         next && next.pass();
+    } else {
+        next && next.miss();
+    }
+}
+
+function testValidSome(next) {
+
+    var items = {
+            1: Valid.some("a", "a|b|c"),
+            2: Valid.some("a", { a:1,b:2,c:3 }),
+            3: !Valid.some("z", "a,b,c"),
+            4: !Valid.some("z", { a:1,b:2,c:3 })
+        };
+
+    var ok = Object.keys(items).every(function(num) {
+                return items[num];
+            });
+
+    if (ok) {
+        next && next.pass();
+    } else {
+        next && next.miss();
     }
 }
 
