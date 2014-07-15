@@ -11,6 +11,7 @@ return new Test("Valid", {
         testValidComplexTypes,
         testValidType,
         testValidSome,
+        testValidSomeIgnore,
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
@@ -104,6 +105,26 @@ function testValidSome(next) {
             2: Valid.some("a", { a:1,b:2,c:3 }),
             3: !Valid.some("z", "a,b,c"),
             4: !Valid.some("z", { a:1,b:2,c:3 })
+        };
+
+    var ok = Object.keys(items).every(function(num) {
+                return items[num];
+            });
+
+    if (ok) {
+        next && next.pass();
+    } else {
+        next && next.miss();
+    }
+}
+
+function testValidSomeIgnore(next) {
+
+    var items = {
+            1: Valid.some("a", "A|b|C", true),
+            2: Valid.some("A", { a:1,b:2,c:3 }, true),
+            3: !Valid.some("Z", "a,b,c", true),
+            4: !Valid.some("Z", { a:1,b:2,c:3 }, true)
         };
 
     var ok = Object.keys(items).every(function(num) {
