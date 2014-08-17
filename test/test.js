@@ -19,7 +19,7 @@ return new Test("Valid", {
     ]).run().clone();
 
 
-function testValidComplexTypes(next) {
+function testValidComplexTypes(test, pass, miss) {
 
     var items = {
             0: Valid.type({}, "SubjectObject|omit"),
@@ -40,13 +40,13 @@ function testValidComplexTypes(next) {
             });
 
     if (ok) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
-function testValidType(next) {
+function testValidType(test, pass, miss) {
     function Aaa() {}
 
     var aaa = new Aaa();
@@ -92,13 +92,13 @@ function testValidType(next) {
             });
 
     if (ok) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
-function testValidSome(next) {
+function testValidSome(test, pass, miss) {
 
     var items = {
             1: Valid.some("a", "a|b|c"),
@@ -112,13 +112,13 @@ function testValidSome(next) {
             });
 
     if (ok) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
-function testValidSomeIgnore(next) {
+function testValidSomeIgnore(test, pass, miss) {
 
     var items = {
             1: Valid.some("a", "A|b|C", true),
@@ -132,13 +132,13 @@ function testValidSomeIgnore(next) {
             });
 
     if (ok) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
-function testValidKeys(next) {
+function testValidKeys(test, pass, miss) {
 
     var rv = [
             Valid.keys({}, "key1/key2/key3"),
@@ -148,13 +148,13 @@ function testValidKeys(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        next && next.miss();
+        test.done(miss());
     } else {
-        next && next.pass();
+        test.done(pass());
     }
 }
 
-function testValidJSON(next) {
+function testValidJSON(test, pass, miss) {
     var json = {
             a: 1,
             b: 2,
@@ -180,13 +180,13 @@ function testValidJSON(next) {
     var rv = Valid.json(json, scheme);
 
     if (rv) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
-function testValidTypedArray(next) {
+function testValidTypedArray(test, pass, miss) {
 
     var items = {
             1: Valid.type(new Int8Array(1), "Int8Array"),
@@ -207,14 +207,14 @@ function testValidTypedArray(next) {
             });
 
     if (ok) {
-        next && next.pass();
+        test.done(pass());
     } else {
-        next && next.miss();
+        test.done(miss());
     }
 }
 
 /*
-function testValidTypeLowerCase(next) {
+function testValidTypeLowerCase(test, pass, miss) {
 
     var rv = [
             Valid.type({}, "object/omit"),          // 0
@@ -253,9 +253,9 @@ function testValidTypeLowerCase(next) {
         ];
 
     if (/false/.test(rv.join())) {
-        next && next.miss();
+        test.done(miss());
     } else {
-        next && next.pass();
+        test.done(pass());
     }
 }
  */
