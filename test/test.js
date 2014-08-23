@@ -15,7 +15,8 @@ return new Test("Valid", {
         testValidKeys,
         testValidJSON,
         testValidTypedArray,
-      //testValidTypeLowerCase
+      //testValidTypeLowerCase,
+        testValidRegisterType,
     ]).run().clone();
 
 
@@ -259,6 +260,21 @@ function testValidTypeLowerCase(test, pass, miss) {
     }
 }
  */
+
+function testValidRegisterType(test, pass, miss) {
+    Valid.register("FooString", function(type, value) {
+        return /^Foo/.test(value);
+    });
+
+    var rv1 = Valid.type("FooString", "FooString");
+    var rv2 = Valid.type("FooString", "String|omit");
+
+    if (rv1 && rv2) {
+        test.done(pass());
+    } else {
+        test.done(miss());
+    }
+}
 
 })((this || 0).self || global);
 
