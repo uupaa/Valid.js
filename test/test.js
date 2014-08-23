@@ -17,6 +17,7 @@ return new Test("Valid", {
         testValidTypedArray,
       //testValidTypeLowerCase,
         testValidRegisterType,
+        testValidIsRegisterType,
     ]).run().clone();
 
 
@@ -275,6 +276,22 @@ function testValidRegisterType(test, pass, miss) {
         test.done(miss());
     }
 }
+
+function testValidIsRegisterType(test, pass, miss) {
+    if ( !Valid.isRegistered("BarString") ) {
+        Valid.register("BarString", function(type, value) {
+            return /^Bar/.test(value);
+        });
+    }
+    var rv = Valid.isRegistered("BarString");
+
+    if (rv) {
+        test.done(pass());
+    } else {
+        test.done(miss());
+    }
+}
+
 
 })((this || 0).self || global);
 
