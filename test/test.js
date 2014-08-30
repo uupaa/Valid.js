@@ -106,7 +106,9 @@ function testValidSome(test, pass, miss) {
             1: Valid.some("a", "a|b|c"),
             2: Valid.some("a", { a:1,b:2,c:3 }),
             3: !Valid.some("z", "a,b,c"),
-            4: !Valid.some("z", { a:1,b:2,c:3 })
+            4: !Valid.some("z", { a:1,b:2,c:3 }),
+            5: Valid.some(null, { a:1,b:2,c:3 }),
+            6: Valid.some(undefined, { a:1,b:2,c:3 }),
         };
 
     var ok = Object.keys(items).every(function(num) {
@@ -294,4 +296,42 @@ function testValidIsRegisterType(test, pass, miss) {
 
 
 })((this || 0).self || global);
+
+
+// ソリッドなコード
+function foo(param,      // @arg Object - { type, target }
+                         // @param.type String - "DOM" or "SVG" or "CSS"
+                         // @param.target String = ""
+             callback) { // @arg Function = null - callback(param.type:String, param.target:String = ""):void
+//{@dev
+    // [1] param が Object型 な事を確認しています
+    // [2] Object.keys(param) に含まれる key が "type" と "target" で、それ以外の不純物がない事を確認しています
+    // [3] param.type が String型 で、 内容が "DOM", "SVG", "CSS" の何れかである事を確認しています
+    // [4] param.target が String型 で省略可能な事をチェックしています
+    // [5] callback が Function型で省略可能な事をチェックしています
+
+    $valid($type(param, "Object"), foo, "param"); // [1]
+    $valid($keys(param, "type|target"), foo, "param"); // [2]
+    $valid($type(param.type, "String") && $some(param.type, "DOM|SVG|CSS"), foo, "param.type"); // [3]
+    $valid($type(param.target, "String|omit"), foo, "param.target"); // [4]
+    $valid($type(callback, "Function|omit"), foo, "callback"); // [5]
+//}@dev
+
+    bar(param, callback);
+}
+
+function bar(param, callback) {
+    if (callback) {
+        callback(param.type, param.target);
+    }
+}
+
+var global = this;
+//{@dev
+function $valid(val, fn, hint) { if (global["Valid"]) { global["Valid"](val, fn, hint); } }
+function $type(obj, type) { return global["Valid"] ? global["Valid"].type(obj, type) : true; }
+function $keys(obj, str) { return global["Valid"] ? global["Valid"].keys(obj, str) : true; }
+function $some(val, str, ignore) { return global["Valid"] ? global["Valid"].some(val, str, ignore) : true; }
+function $args(fn, args) { if (global["Valid"]) { global["Valid"].args(fn, args); } }
+//}@dev
 
