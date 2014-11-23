@@ -18,6 +18,7 @@ return new Test("Valid", {
       //testValidTypeLowerCase,
         testValidRegisterType,
         testValidIsRegisterType,
+        testValidFoo,
     ]).run().clone();
 
 
@@ -87,6 +88,36 @@ function testValidType(test, pass, miss) {
            31:  Valid.type(void 0, "Void"),
            32:  Valid.type(void 0, "Undefined"),
            33:  Valid.type(aaa, "this"),
+
+           34:  Valid.type(-0x80000000, "Int32"),
+           35:  Valid.type( 0x7fffffff, "Int32"),
+           36: !Valid.type( 0x80000000, "Int32"),
+           37:  Valid.type(-0x8000, "Int16"),
+           38:  Valid.type( 0x7fff, "Int16"),
+           39: !Valid.type( 0x8000, "Int16"),
+           40:  Valid.type(-0x80, "Int8"),
+           41:  Valid.type( 0x7f, "Int8"),
+           42: !Valid.type( 0x80, "Int8"),
+
+           43:  Valid.type(0x0,            "Uint32"),
+           44:  Valid.type(0xffffffff,     "Uint32"),
+           45: !Valid.type(0xffffffff + 1, "Uint32"),
+           46:  Valid.type(0x0,        "Uint16"),
+           47:  Valid.type(0xffff,     "Uint16"),
+           48: !Valid.type(0xffff + 1, "Uint16"),
+           49:  Valid.type(0x0,      "Uint8"),
+           50:  Valid.type(0xff,     "Uint8"),
+           51: !Valid.type(0xff + 1, "Uint8"),
+
+           52:  Valid.type(0x00000000,     "AARRGGBB"),
+           53:  Valid.type(0xffffffff,     "AARRGGBB"),
+           54: !Valid.type(0xffffffff + 1, "AARRGGBB"),
+           55:  Valid.type(0x00000000,     "RRGGBBAA"),
+           56:  Valid.type(0xffffffff,     "RRGGBBAA"),
+           57: !Valid.type(0xffffffff + 1, "RRGGBBAA"),
+           58:  Valid.type(0x000000,       "RRGGBB"),
+           59:  Valid.type(0xffffff,       "RRGGBB"),
+           60: !Valid.type(0xffffff + 1,   "RRGGBB"),
         };
 
     var ok = Object.keys(items).every(function(num) {
@@ -204,6 +235,7 @@ function testValidTypedArray(test, pass, miss) {
             9: Valid.type(new Float64Array(1), "Float64Array"),
             10: !Valid.type(new Array(1), "Uint32Array"),
             11: !Valid.type(new Float64Array(1), "Uint32Array"),
+            12: !Valid.type([0x7f, 0xfff], "Int8Array"),
         };
 
     var ok = Object.keys(items).every(function(num) {
@@ -292,6 +324,29 @@ function testValidIsRegisterType(test, pass, miss) {
     } else {
         test.done(miss());
     }
+}
+
+function testValidFoo(test, pass, miss) {
+
+    try {
+        foo(new Uint32Array([1,2,3]), "b", "B", { foo: 1, bar: 2 },
+            { verbose: true, cursor: 0, color: 0xffffff });
+        test.done(miss());
+    } catch(o_o) {
+        test.done(pass());
+    }
+}
+
+function foo(buffer,              // @arg Uint32Array
+             keyword,             // @arg String - "a" or "b" or "c"
+             keyword2,   // @arg IgnoreCaseString - "a" or "b" or "c"
+             options) {           // @arg Object - { verbose, cursor }
+//{@dev
+    $valid($type(buffer,   "Uint32Array"),   foo, "buffer");   // -> ok
+    $valid($some(keyword,  "a|b|c"),         foo, "keyword");  // -> ok
+    $valid($some(keyword2, "a|b|c", true),   foo, "keyword2"); // -> ok
+    $valid($keys(options,  "verbose|cursor"),foo, "options");  // -> color is unknown property -> throw
+//}@dev
 }
 
 

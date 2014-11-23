@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.valid.js",
-  "version":        "0.9.18",
+  "version":        "0.9.19",
   "description":    "Validate functions.",
   "url":            "https://github.com/uupaa/Valid.js",
   "keywords":       ["Validation", "util", "uupaa", "WebModule", "Unstable"],
