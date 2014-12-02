@@ -118,6 +118,26 @@ function testValidType(test, pass, miss) {
            58:  Valid.type(0x000000,       "RRGGBB"),
            59:  Valid.type(0xffffff,       "RRGGBB"),
            60: !Valid.type(0xffffff + 1,   "RRGGBB"),
+
+           60:  Valid.type(-0x80000000, "INT32"),
+           61:  Valid.type( 0x7fffffff, "INT32"),
+           62: !Valid.type( 0x80000000, "INT32"),
+           63:  Valid.type(-0x8000, "INT16"),
+           64:  Valid.type( 0x7fff, "INT16"),
+           65: !Valid.type( 0x8000, "INT16"),
+           66:  Valid.type(-0x80, "INT8"),
+           67:  Valid.type( 0x7f, "INT8"),
+           68: !Valid.type( 0x80, "INT8"),
+
+           69:  Valid.type(0x0,            "UINT32"),
+           70:  Valid.type(0xffffffff,     "UINT32"),
+           71: !Valid.type(0xffffffff + 1, "UINT32"),
+           72:  Valid.type(0x0,        "UINT16"),
+           73:  Valid.type(0xffff,     "UINT16"),
+           74: !Valid.type(0xffff + 1, "UINT16"),
+           75:  Valid.type(0x0,      "UINT8"),
+           76:  Valid.type(0xff,     "UINT8"),
+           77: !Valid.type(0xff + 1, "UINT8"),
         };
 
     var ok = Object.keys(items).every(function(num) {
