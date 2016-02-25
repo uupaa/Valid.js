@@ -1,27 +1,42 @@
 var ModuleTestValid = (function(global) {
 
-return new Test("Valid", {
-        disable:    false,
-        node:       true,
-        browser:    true,
-        worker:     true,
-        button:     true,
-        both:       false,
-    }).add([
+var test = new Test(["Valid"], { // Add the ModuleName to be tested here (if necessary).
+        disable:    false, // disable all tests.
+        browser:    true,  // enable browser test.
+        worker:     true,  // enable worker test.
+        node:       true,  // enable node test.
+        nw:         true,  // enable nw.js test.
+        el:         true,  // enable electron (render process) test.
+        button:     true,  // show button.
+        both:       true,  // test the primary and secondary modules.
+        ignoreError:false, // ignore error.
+        callback:   function() {
+        },
+        errorback:  function(error) {
+            console.error(error.message);
+        }
+    });
+
+if (IN_BROWSER || IN_NW || IN_EL || IN_WORKER || IN_NODE) {
+    test.add([
         testValidComplexTypes,
         testValidType,
         testValidSome,
         testValidSomeIgnore,
         testValidKeys,
+        testValidKeys2,
+        testValidValues,
         testValidJSON,
         testValidTypedArray,
       //testValidTypeLowerCase,
         testValidRegisterType,
         testValidIsRegisterType,
         testValidFoo,
-    ]).run().clone();
+        testValidArgs,
+    ]);
+}
 
-
+// --- test cases ------------------------------------------
 function testValidComplexTypes(test, pass, miss) {
 
     var items = {
@@ -32,7 +47,7 @@ function testValidComplexTypes(test, pass, miss) {
             4: Valid.type(/a/, "HogeRegExp"),
             5: Valid.type([], "StringArray"),
             6: Valid.type([], "IntegerArray/JSONObject"),
-            7: Valid.type(new Task(1, function(){}), "HogeTask"),
+            7: Valid.type(new Task("testValidComplexTypes", 1, function(){}), "HogeTask"),
             8: Valid.type("123", "IDString"),
             9: Valid.type("123", "ObjectIDString"),
            10: Valid.type("123", "FooIntegerIDString"),
@@ -81,7 +96,7 @@ function testValidType(test, pass, miss) {
            24: !Valid.type("", "Boolean"),
            25: !Valid.type(null, "Boolean"),
            26: !Valid.type(undefined, "Boolean"),
-           27:  Valid.type(new Task(1, function(){}), "Task"),
+           27:  Valid.type(new Task("testValidType", 1, function(){}), "Task"),
            28:  Valid.type(null, "null"),
            29:  Valid.type(undefined, "undefined"),
            30:  Valid.type(void 0, "void"),
@@ -209,6 +224,49 @@ function testValidKeys(test, pass, miss) {
     }
 }
 
+function testValidKeys2(test, pass, miss) {
+
+    var object = { "foo": 1, "bar": 2, "buz": 3, };
+    var array  = [ 1, 2 ]; // { 0: 1, 1: 2, length: 2 }
+
+    var rv = [
+            !Valid.keys(object,    "foo|bar"),         // -> false (foo or bar を想定しているが、object に想定外の buz が存在する → false)
+             Valid.keys(object,    "foo|bar|buz|pee"), // -> true  (foo or bar or buz or pee を想定しており、 object に foo, bar, buz が含まれる → true)
+             Valid.keys(array,     "0|1"),             // -> true  (0 or 1 を想定しており、array に 0, 1 が含まれる → true)
+            !Valid.keys(array,     "0|2"),             // -> false (0 or 1 を想定しており、array に想定外の 2 が含まれる → false)
+             Valid.keys(null,      ""),                // -> true
+             Valid.keys(undefined, ""),                // -> true
+        ];
+
+    if (/false/.test(rv.join())) {
+        test.done(miss());
+    } else {
+        test.done(pass());
+    }
+}
+
+function testValidValues(test, pass, miss) {
+
+    var object = { "foo": 1, "bar": 2, "buz": 3, };
+    var array  = [ 1, 2 ]; // { 0: 1, 1: 2, length: 2 }
+
+    var rv = [
+            !Valid.values(object,    [1,2]),          // -> false (1 or 2 を想定しているが、object に想定外の 3 が存在する → false)
+             Valid.values(object,    [1,2,3,4]),      // -> true  (1 or 2 or 3 or 4 を想定しており、object に 1, 2, 3 が含まれる → true)
+             Valid.values(array,     [1,2]),          // -> true  (1 or 2 を想定しており、array に 1, 2 が含まれる → true)
+            !Valid.values(array,     [1,3]),          // -> false (1 or 3 を想定しており、array に想定外の 2 が含まれる → false)
+             Valid.values(null,      ""),             // -> true
+             Valid.values(undefined, ""),             // -> true
+        ];
+
+    if (/false/.test(rv.join())) {
+        test.done(miss());
+    } else {
+        test.done(pass());
+    }
+}
+
+
 function testValidJSON(test, pass, miss) {
     var json = {
             a: 1,
@@ -303,7 +361,7 @@ function testValidTypeLowerCase(test, pass, miss) {
 //            Valid.type({ a: 1, b: 2, c: 0 }, "json/omit", { a: 0, b: 0, c: 0 }), // 27
 //           !Valid.type({ a: 1, b: 2, c: {} }, "json/omit", { a: 0, b: 0, c: 0 }), // 28
 //            Valid.type({ a: 1, b: 2, c: { d: 1 } }, "json/omit", { a: 0, b: 0, c: { d: 0 } }), // 29
-            Valid.type(new Task(1, function(){}), "task"), // 30
+            Valid.type(new Task("testValidTypeLowerCase", 1, function(){}), "task"), // 30
             Valid.type(null, "null"),               // 31
             Valid.type(undefined, "undefined"),     // 32
         ];
@@ -357,6 +415,23 @@ function testValidFoo(test, pass, miss) {
     }
 }
 
+function testValidArgs(test, pass, miss) {
+
+    function buzz(arg1,   // @arg Number|String
+                  arg2) { // @arg String = ""
+//{@dev
+        Valid.args(buzz, arguments);
+//}@dev
+    }
+
+    try {
+        buzz(123, []);
+        test.done(miss());
+    } catch(o_o) {
+        test.done(pass());
+    }
+}
+
 function foo(buffer,              // @arg Uint32Array
              keyword,             // @arg String - "a" or "b" or "c"
              keyword2,   // @arg IgnoreCaseString - "a" or "b" or "c"
@@ -369,10 +444,7 @@ function foo(buffer,              // @arg Uint32Array
 //}@dev
 }
 
-
-})((this || 0).self || global);
-
-
+/*
 // ソリッドなコード
 function foo(param,      // @arg Object - { type, target }
                          // @param.type String - "DOM" or "SVG" or "CSS"
@@ -400,13 +472,9 @@ function bar(param, callback) {
         callback(param.type, param.target);
     }
 }
+ */
 
-var global = this;
-//{@dev
-function $valid(val, fn, hint) { if (global["Valid"]) { global["Valid"](val, fn, hint); } }
-function $type(obj, type) { return global["Valid"] ? global["Valid"].type(obj, type) : true; }
-function $keys(obj, str) { return global["Valid"] ? global["Valid"].keys(obj, str) : true; }
-function $some(val, str, ignore) { return global["Valid"] ? global["Valid"].some(val, str, ignore) : true; }
-function $args(fn, args) { if (global["Valid"]) { global["Valid"].args(fn, args); } }
-//}@dev
+return test.run();
+
+})(GLOBAL);
 
